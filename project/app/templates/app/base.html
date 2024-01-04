@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}デフォルトタイトル{% endblock %}</title>
+    <!-- Tailwind CSSの場合 -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Bootstrapの場合、以下の行をコメントアウトし、上の行を削除してください -->
+    <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> -->
+</head>
+<body>
+    <nav class="bg-gray-800 p-4 text-white">
+        <div class="container mx-auto">
+            <a href="/app/list" class="font-semibold mr-4">ホーム</a>
+            <a href="/app/register" class="font-semibold">登録</a>
+    </nav>
+
+    {% block content %}
+    {% endblock %}
+
+</body>
+</html>

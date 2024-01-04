@@ -1,0 +1,103 @@
+{% extends "app/base.html" %}
+
+{% block title %}登録{% endblock %}
+
+{% block content %}
+
+{% load static %}
+<link href="{% static 'app/css/app.css' %}" rel="stylesheet">
+
+<div class="container mx-auto mt-10">
+    <form action="/app/register" method="post">
+        {% csrf_token %}
+        <div class="mb-4">
+            <label for="repository" class="block text-gray-700 text-sm font-bold mb-2">リポジトリ:</label>
+            {{ form.repository }}
+        </div>
+        <div class="mb-4">
+            <label for="title" class="block text-gray-700 text-sm font-bold mb-2">タイトル:</label>
+            {{ form.title }}
+        </div>
+        <div class="mb-4">
+            <label for="st_pull_request_url" class="block text-gray-700 text-sm font-bold mb-2">STプルリクエストURL:</label>
+            {{ form.st_pull_request_url }}
+        </div>
+        <div class="mb-4">
+            <label for="e2e_uat_pull_request_url" class="block text-gray-700 text-sm font-bold mb-2">E2E UATプルリクエストURL:</label>
+            {{ form.e2e_uat_pull_request_url }}
+        </div>
+        <div class="mb-4">
+            <label for="main_pull_request_url" class="block text-gray-700 text-sm font-bold mb-2">メインプルリクエストURL:</label>
+            {{ form.main_pull_request_url }}
+        </div>
+        <div class="flex mb-4">
+            <div class="w-1/2 pr-2">
+                <label for="source_branch" class="block text-gray-700 text-sm font-bold mb-2">ソースブランチ:</label>
+                {{ form.source_branch }}
+            </div>
+            <div class="w-1/2 pl-2">
+                <label for="target_branch" class="block text-gray-700 text-sm font-bold mb-2">ターゲットブランチ:</label>
+                {{ form.target_branch }}
+            </div>
+        </div>
+        <div class="mb-4">
+            <input type="submit" value="登録" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+        </div>
+    </form>
+</div>
+
+<script>
+    function updateInputState() {
+        // STプルリクエストURLに値が入力された
+        const stUrl = document.getElementById('id_st_pull_request_url').value;
+        setDisable('id_e2e_uat_pull_request_url', stUrl);
+
+        // E2E UATプルリクエストURLに値が入力された
+        const e2eUrl = document.getElementById('id_e2e_uat_pull_request_url').value;
+        setDisable('id_main_pull_request_url', e2eUrl);
+
+        // メインプルリクエストURLに値が入力された
+        const mainUrl = document.getElementById('id_main_pull_request_url').value;
+
+        const url = mainUrl || e2eUrl || stUrl;
+        const repository = getRepositoryName(url);
+        const pullRequestId = getPullRequestId(url);
+
+        document.getElementById('id_repository').value = repository;
+
+        const branches = getBranches(url);
+        document.getElementById('id_target_branch').value = branches.target;
+        document.getElementById('id_source_branch').value = branches.source;
+
+    }
+    function getRepositoryName(url) {
+        // TODO : 後で書く
+        return 'SampleRepository'
+    }
+
+    function getPullRequestId(url) {
+        // TODO : 後で書く
+        const removeWord = "https://dev.azure.com/ittimfn/SampleProject/_git/SampleProject/pullrequest/"
+        return url.replace(removeWord, '')
+    }
+
+    function getBranches(url) {
+        // TODO : 後で書く
+        return {'source': 'develop', 'target': 'master'}
+    }
+    function setDisable(id, baseValue) {
+        console.info(id , baseValue)
+        const state = !baseValue;
+        console.info(state);
+
+        const element = document.getElementById(id);
+        console.info(element.value)
+        element.disabled = state;
+        element.readOnly = state;
+        if (state) {
+            element.value = "";
+        }
+    }
+
+</script>
+{% endblock %}
